@@ -3,19 +3,18 @@
 # A script to read information from Digital Ocean.
 
 usage() {
-  echo "Usage: $0 [-t TOKEN] -(i|s|k|r)"
+  echo "Usage: $0 [-t TOKEN] list [droplets|images|keys]"
   echo
   echo "  -t TOKEN"
   echo "    The token to authenticate with."
   echo "    Either use -t or set DO_API_TOKEN."
-  echo "  -i"
+  echo "  list images"
   echo "    Show images."
-  echo "  -s"
-  echo "    Show sizes."
-  echo "  -k"
+  echo "  list droplets"
+  echo "    Show droplets."
+  echo "  list keys"
   echo "    Show keys."
-  echo "  -r"
-  echo "    Show regions."
+  
   exit 1
 }
 
@@ -33,21 +32,17 @@ readargs() {
           usage
         fi
       ;;
-      -i)
-        object="images"
-        shift
-      ;;
-      -s)
-        object="sizes"
-        shift
-      ;;
-      -k)
-        object="account/keys"
-        shift
-      ;;
-      -r)
-	object="regions"
-	shift
+      list)
+        action=list
+        if [ "$2" ] ; then
+          resource="$2"
+          shift ; shift
+        else
+          echo "Missing a value for $1."
+          echo
+          shift
+          usage
+        fi
       ;;
       *)
         echo "Unknown option, argument or switch: $1."
@@ -67,10 +62,15 @@ checkargs() {
     echo "Missing token."
     usage
   fi
-  if [ ! "${object}" ] ; then
-    echo "No object specified."
+  if [ ! "${action}" ] ; then
+    echo "No action specified."
     usage
   fi
+  if [ ! "${resource}" ] ; then
+    echo "No resource specified."
+    usage
+  fi
+
 }
 
 main() {
