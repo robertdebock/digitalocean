@@ -1,0 +1,13 @@
+language: python
+
+install:
+  - chmod +x do.sh
+
+script:
+  - ./do.sh -i
+  - ./do.sh -s
+  - ./do.sh -k
+  - ./do.sh -r
+
+notifications:
+  email: false
