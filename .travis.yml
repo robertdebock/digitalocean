@@ -1,13 +1,16 @@
 language: python
 
+env:
+  - action: show
+    - resource: droplets
+    - resource: images
+    - resource: keyes
+
 install:
   - chmod +x do.sh
 
 script:
-  - ./do.sh -i
-  - ./do.sh -s
-  - ./do.sh -k
-  - ./do.sh -r
-
+  - ./do.sh "${action}" "${resources}"
+  
 notifications:
   email: false
